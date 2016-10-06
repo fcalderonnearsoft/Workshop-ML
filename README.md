@@ -81,3 +81,21 @@ of the issues you'll find with the data you can find in real world situations.
 
 This data has 768 patient observation rows, each row has 10 columns, nine of these columns are feature columns such as
 number of pregnancies, blood pressure, etc. and one class column (diabetes - true or false)
+
+### Importing our data to Jupyter Notebook
+
+We need to start our Notebook server. Type the following in terminal:
+
+``` jupyter notebook ```
+
+we need to create a new notebook and write the following:
+
+```
+#Import libraries
+import pandas as pd                 # pandas is a dataframe library
+import matplotlib.pyplot as plt     # matplotlib.pyplot plots data
+import numpy as np                  # numpy provides N-dim object support
+
+# do ploting inline instead of in a separate window
+%matplotlib inline
+```
