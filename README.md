@@ -86,11 +86,13 @@ number of pregnancies, blood pressure, etc. and one class column (diabetes - tru
 
 We need to start our Notebook server. Type the following in terminal:
 
-``` jupyter notebook ```
+```bash
+ jupyter notebook
+ ```
 
 we need to create a new notebook and write the following:
 
-```
+```python
 #Import libraries
 import pandas as pd                 # pandas is a dataframe library
 import matplotlib.pyplot as plt     # matplotlib.pyplot plots data
