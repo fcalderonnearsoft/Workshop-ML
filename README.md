@@ -90,7 +90,7 @@ We need to start our Notebook server. Type the following in terminal:
  jupyter notebook
  ```
 
-we need to create a new notebook and write the following:
+we need to create a new notebook and import the following:
 
 ```python
 #Import libraries
@@ -100,4 +100,54 @@ import numpy as np                  # numpy provides N-dim object support
 
 # do ploting inline instead of in a separate window
 %matplotlib inline
+```
+
+### Load data
+
+```python
+df = pd.read_csv("./data/pima-data.csv")      # load Pima data.  Adjust path as necessary
+```
+
+### Cleaning the data
+
+We need to remove:
+
+1. Columns with no values
+2. Correlated columns
+
+Check if there are null values
+
+```python
+df.isnull().values.any()
+```
+Check for correlated columns
+
+Let's define a function to draw a correlation table for our data set:
+
+```python
+def plot_corr(df, size=10):
+    """
+    Function plots a graphical correlation matrix for each pair of columns in the dataframe.
+
+    Input:
+        df: pandas DataFrame
+        size: vertical and horizontal size of the plot
+
+    Displays:
+        matrix of correlation between columns.  Blue-cyan-yellow-red-darkred => less to more correlated
+                                                0 ------------------>  1
+                                                Expect a darkred line running from top left to bottom right
+    """
+
+    corr = df.corr()    # data frame correlation function
+    fig, ax = plt.subplots(figsize=(size, size))
+    ax.matshow(corr)   # color code the rectangles by correlation value
+    plt.xticks(range(len(corr.columns)), corr.columns)  # draw x tick marks
+    plt.yticks(range(len(corr.columns)), corr.columns)  # draw y tick marks
+```
+
+Now let's use this function:
+
+```python
+plot_corr(df)
 ```
