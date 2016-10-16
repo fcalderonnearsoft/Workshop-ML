@@ -365,5 +365,11 @@ print("")
 
 print("Classification Report")
 print(metrics.classification_report(y_test, lr_predict_test, labels=[1,0]))
-
 ```
+
+We finally achieve our goal, I guess we are done here..... NOT.
+If you carefully check how we calculate the regularization hyper-parameter, you
+can notice that we tried to `fit` with testing data. So, we need more data to test our
+model and check if we have `Overfitting` issues. But we don't have more data, what we could do?
+
+### K-fold cross validation
