@@ -246,3 +246,124 @@ print("")
 print("Classification Report")
 print(metrics.classification_report(y_test, rf_predict_test, labels=[1,0]))
 ```
+
+We are having `Overfitting` issues with Random Forest algorithm.
+We have some options to try to fix this issue:
+
+1. Adjust current algorithm
+2. Get more data
+3. Switch algorithm
+
+### Switch to Logistic Regression
+
+```python
+from sklearn.linear_model import LogisticRegression
+
+lr_model = LogisticRegression(C=0.7, random_state=42)
+lr_model.fit(X_train, y_train.ravel())
+lr_predict_test = lr_model.predict(X_test)
+
+# Print the results
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, lr_predict_test)))
+
+print("Confusion Matrix")
+# Note the use of labels for set 1=True to upper left and 0=False to lower right
+
+print("{0}".format(metrics.confusion_matrix(y_test, lr_predict_test, labels=[1,0])))
+print("")
+
+print("Classification Report")
+print(metrics.classification_report(y_test, lr_predict_test, labels=[1,0]))
+```
+
+Hmm it's seems we need to improve our algorithm, let's create a loop to try to
+differents values of C, to see which will work better:
+
+```python
+C_start = 0.1
+C_end = 5
+C_inc = 0.1
+
+C_values, recall_scores = [], []
+
+C_val = C_start
+best_recall_score = 0
+while (C_val < C_end):
+  C_values.append(C_val)
+  lr_model_loop = LogisticRegression(C=C_val, random_state=42)
+  lr_model_loop.fit(X_train, y_train.ravel())
+  lr_predict_loop_test = lr_model_loop.predict(X_test)
+  recall_score = metrics.recall_score(y_test, lr_predict_loop_test)
+  recall_scores.append(recall_score)
+  if(recall_score > best_recall_score):
+    best_recall_score = recall_score
+    best_lr_predict_test = lr_predict_loop_test
+
+  C_val = C_val + C_inc
+
+best_score_C_val = C_values[recall_scores.index(best_recall_score)]
+print("1st max value of {0:.3f} occured at C={1:.3f}".format(best_recall_score, best_score_C_val))
+```
+
+It seems we are not achieving our 70% or more accuracy goal, what else we could try?
+
+If we check our data, we can see that we have more non-diabetes results than diabetes results
+
+```python
+num_true = len(df.loc[df['diabetes'] == True])
+num_false = len(df.loc[df['diabetes'] == False])
+print("Number of True cases:  {0} ({1:2.2f}%)".format(num_true, (num_true/ (num_true + num_false)) * 100))
+print("Number of False cases: {0} ({1:2.2f}%)".format(num_false, (num_false/ (num_true + num_false)) * 100))
+```
+
+Perhaps this imbalance is causing an issue. Luckily, algorithms like LogisticRegression includes a
+hyper-parameter to compensate the imbalance.
+
+```python
+C_start = 0.1
+C_end = 5
+C_inc = 0.1
+
+C_values, recall_scores = [], []
+
+C_val = C_start
+best_recall_score = 0
+while (C_val < C_end):
+  C_values.append(C_val)
+  lr_model_loop = LogisticRegression(C=C_val, class_weight="balanced",random_state=42)
+  lr_model_loop.fit(X_train, y_train.ravel())
+  lr_predict_loop_test = lr_model_loop.predict(X_test)
+  recall_score = metrics.recall_score(y_test, lr_predict_loop_test)
+  recall_scores.append(recall_score)
+  if(recall_score > best_recall_score):
+    best_recall_score = recall_score
+    best_lr_predict_test = lr_predict_loop_test
+
+  C_val = C_val + C_inc
+
+best_score_C_val = C_values[recall_scores.index(best_recall_score)]
+print("1st max value of {0:.3f} occured at C={1:.3f}".format(best_recall_score, best_score_C_val))
+```
+
+Now let's train our model with those values:
+
+```python
+from sklearn.linear_model import LogisticRegression
+
+lr_model = LogisticRegression(C=best_score_C_val, class_weight="balanced", random_state=42)
+lr_model.fit(X_train, y_train.ravel())
+lr_predict_test = lr_model.predict(X_test)
+
+# Print the results
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, lr_predict_test)))
+
+print("Confusion Matrix")
+# Note the use of labels for set 1=True to upper left and 0=False to lower right
+
+print("{0}".format(metrics.confusion_matrix(y_test, lr_predict_test, labels=[1,0])))
+print("")
+
+print("Classification Report")
+print(metrics.classification_report(y_test, lr_predict_test, labels=[1,0]))
+
+```
