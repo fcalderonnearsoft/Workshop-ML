@@ -373,3 +373,6 @@ can notice that we tried to `fit` with testing data. So, we need more data to te
 model and check if we have `Overfitting` issues. But we don't have more data, what we could do?
 
 ### K-fold cross validation
+
+Diagram: 
+![alt text](https://github.com/fcalderonnearsoft/Workshop-ML/blob/master/img/crossvalidation.png "K-fold Cross Validation")
