@@ -151,3 +151,98 @@ Now let's use this function:
 ```python
 plot_corr(df)
 ```
+We can see how `skin` and `thickness` are highly correlated. In this case we need to drop
+this column to get rid of the correlation:
+
+```python
+del df['skin']
+```
+
+For a better performance, we need all values to be numerical.
+
+```python
+diabetes_map = {True : 1, False : 0}
+
+df['diabetes'] = df['diabetes'].map(diabetes_map)
+```
+### Splitting data
+
+```python
+from sklearn.cross_validation import train_test_split
+
+feature_col_names = ['num_preg', 'glucose_conc', 'diastolic_bp', 'thickness', 'insulin', 'bmi', 'diab_pred', 'age']
+predicted_class_names = ['diabetes']
+
+X = df[feature_col_names].values
+y = df[predicted_class_names].values
+split_test_size = 0.30
+
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=split_test_size, random_state=42)
+```
+
+***Random state: setting a constant ensures that if we run the function again, the split will be identical.***
+
+
+### Check if we have missing data
+
+```python
+print("# rows missing insulin: {0}".format(len(df.loc[df['insulin'] == 0])))
+```
+
+We have a lot of missing data. One way to fix this is to calculate the mean of the column and add
+the result to the missing data columns:
+
+```python
+from sklearn.preprocessing import Imputer
+
+fill_0 = Imputer(missing_values=0, strategy="mean", axis=0)
+
+X_train = fill_0.fit_transform(X_train)
+X_test = fill_0.fit_transform(X_test)
+```
+
+### Selecting our algorithm, training and testing our model
+
+For this example let's use Random Forest algorithm:
+
+```python
+# Import Random Forest
+from sklearn.ensemble import RandomForestClassifier
+# Create Random Forest model
+rf_model = RandomForestClassifier(random_state=42)
+# Train model
+rf_model.fit(X_train, y_train.ravel())
+```
+
+Let's use our model to predict with training data
+
+```python
+# Predict training data
+
+rf_predict_train = rf_model.predict(X_train)
+# Training metrics
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_train, rf_predict_train)))
+```
+
+Let's use our model to predict with testing data
+
+```python
+# Predict testing data
+
+rf_predict_test = rf_model.predict(X_test)
+# Training metrics
+print("Accuracy: {0:.4f}".format(metrics.accuracy_score(y_test, rf_predict_test)))
+```
+
+Weird? Let's see more details using `Confusion Matrix`
+
+```python
+print("Confusion Matrix")
+# Note the use of labels for set 1=True to upper left and 0=False to lower right
+
+print("{0}".format(metrics.confusion_matrix(y_test, rf_predict_test, labels=[1,0])))
+print("")
+
+print("Classification Report")
+print(metrics.classification_report(y_test, rf_predict_test, labels=[1,0]))
+```
