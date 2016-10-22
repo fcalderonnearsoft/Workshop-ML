@@ -368,11 +368,17 @@ print(metrics.classification_report(y_test, lr_predict_test, labels=[1,0]))
 ```
 
 We finally achieve our goal, I guess we are done here..... NOT.
-If you carefully check how we calculate the regularization hyper-parameter, you
-can notice that we tried to `fit` with testing data. So, we need more data to test our
-model and check if we have `Overfitting` issues. But we don't have more data, what we could do?
+Now, we will persist our model so we could use it in a web application.
 
-### K-fold cross validation
+### Persisting our model
 
-Diagram: 
-![alt text](https://github.com/fcalderonnearsoft/Workshop-ML/blob/master/img/crossvalidation.png "K-fold Cross Validation")
+```python
+import pickle
+import os
+dest = os.path.join('diabetesmodel', 'pkl_objects')
+if not os.path.exists(dest):
+     os.makedirs(dest)
+pickle.dump(lr_model,
+            open(os.path.join(dest, 'diabetes.pkl'), 'wb'),
+            protocol=4)
+```
