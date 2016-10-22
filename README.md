@@ -388,3 +388,55 @@ pickle.dump(lr_model,
 Now we need to install some tools to build our web application.
 
 ### Installing our virtual environment
+
+Let's run this in our terminal:
+
+```bash
+sudo pip3 install virtualenv
+```
+Now we will create a virtualenv in the webapp folder
+
+```bash
+virtualenv webapp
+```
+
+And we're going to activate the virtualenv
+
+```bash
+cd webapp
+source bin/activate
+```
+
+### Install flask
+
+```bash
+pip install Flask
+```
+
+### Install WtForms
+
+```bash
+pip install wtforms
+```
+
+### Install NumPy, SciPy, Scikit-learn
+
+```bash
+pip install -t . numpy scipy scikit-learn
+```
+
+### Importing our model
+
+Let's open `app.py` and replace in the line 10 the following:
+
+```python
+clf = pickle.load(open(os.path.join(cur_dir,'path/to/our/model'), 'rb'))
+```
+
+And let's test our app, we need to type in our terminal the following:
+
+```bash
+python3 app.py
+```
+
+And go into `http://localhost:5000`
