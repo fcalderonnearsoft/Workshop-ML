@@ -372,6 +372,9 @@ Now, we will persist our model so we could use it in a web application.
 
 ### Persisting our model
 
+We are going to write this in Jupyter, and will create a new folder called `pkl_objects`
+and into that folder, will create our model in the file `diabetes.pkl`
+
 ```python
 import pickle
 import os
@@ -382,3 +385,6 @@ pickle.dump(lr_model,
             open(os.path.join(dest, 'diabetes.pkl'), 'wb'),
             protocol=4)
 ```
+Now we need to install some tools to build our web application.
+
+### Installing our virtual environment

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <title>Diabetes predictor</title>
+    <link rel="stylesheet" href="./static/bootstrap.css" media="screen" title="no title">
+    <link rel="stylesheet" href="./static/style.css" media="screen" title="no title">
+    <link rel="stylesheet" href="./static/hoverex-all.css" media="screen" title="no title">
+</head>
+  <body>
+<h1>Diabetes predictor</h1><br/><br/>
+<h2>Please enter your clinic data:</h2>
+
+
+<form method=post action="/results">
+<div class="col-lg-8">
+  <div class="form-group">
+    <label>Number of pregnacies</label>
+    <input type="text" name="number_of_pregnacies" id="number_of_pregnacies"/>
+  </div>
+  <div class="form-group">
+    <label>Glucose</label>
+    <input type="text" name="glucose" id="glucose"/>
+  </div>
+  <div class="form-group">
+    <label>Blood pressure</label>
+    <input type="text" name="blood_pressure" id="blood_pressure"/>
+  </div>
+  <div class="form-group">
+    <label>Thickness</label>
+    <input type="text" name="thickness" id="thickness"/>
+  </div>
+  <div class="form-group">
+    <label>Insulin</label>
+    <input type="text" name="insulin" id="insulin"/>
+  </div>
+  <div class="form-group">
+    <label>Body mass index</label>
+    <input type="text" name="body_mass_index" id="body_mass_index"/>
+  </div>
+  <div class="form-group">
+    <label>Diabetes pedigree</label>
+    <input type="text" name="diabetes_pedigree" id="diabetes_pedigree"/>
+  </div>
+  <div class="form-group">
+    <label>Age</label>
+    <input type="text" name="age" id="age"/>
+  </div>
+  <div class="form-group">
+    <input type=submit class="btn btn-theme" value='Submit review' name='submit_btn'>
+  </div>
+</div>
+</form>
+  </body>
+</html>
